@@ -1,0 +1,8 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "asm-emulator": "apps/asm-emulator",
+    "asm-emulator-e2e": "apps/asm-emulator-e2e"
+  }
+}
