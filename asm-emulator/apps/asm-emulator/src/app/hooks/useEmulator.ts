@@ -1,12 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useCommandMemory } from './useCommandMemory';
 import { useCommands } from './useCommands';
-import { useDataMemory } from './useDataMemory';
+import { useMemory } from './useMemory';
+import { useStackMemory } from './useStackMemory';
 
 export function useEmulator() {
-  const { memory, push: memoryPush, pop: memoryPop } = useDataMemory();
-  const { pc, setPc, commandMemory, setCommandMemory } = useCommandMemory();
-  const { commands } = useCommands(memoryPush, memoryPop, pc, commandMemory);
+  const stack = useStackMemory();
+  const { pc, setPc, commandMemory, setCommandMemory, counter, setCounter } =
+    useCommandMemory();
+  const { memory, getItem, setItem } = useMemory();
+  const { commands } = useCommands(
+    stack,
+    pc,
+    commandMemory,
+    getItem,
+    setItem,
+    counter,
+    setCounter
+  );
   const [executing, setExecuting] = useState<boolean>(false);
 
   const step = useCallback(() => {
@@ -21,7 +32,7 @@ export function useEmulator() {
 
   const execute = useCallback(() => {
     setExecuting(true);
-    setTimeout(()=>setExecuting(false), 5000);
+    setTimeout(() => setExecuting(false), 5000);
   }, [executing]);
 
   useEffect(() => {
@@ -31,5 +42,15 @@ export function useEmulator() {
     }
   }, [step, executing, pc, commandMemory]);
 
-  return { memory, commandMemory, pc, step, setCommandMemory, execute };
+  return {
+    memory,
+    stack,
+    commandMemory,
+    pc,
+    counter,
+    step,
+    setCommandMemory,
+    execute,
+    setItem,
+  };
 }

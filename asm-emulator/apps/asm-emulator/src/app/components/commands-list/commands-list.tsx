@@ -9,6 +9,7 @@ import styles from './commands-list.module.scss';
 export interface CommandsListProps {
   pc: number;
   commands: number[];
+  counter: number;
 }
 
 const Command = memo(
@@ -34,7 +35,10 @@ export function CommandsList(props: CommandsListProps) {
   return (
     <div className={styles['container']}>
       <h3>Commands realted memory</h3>
-      <div>PC: {props.pc}</div>
+      <div className={styles['vars']}>
+        <span>PC: {props.pc}</span>
+        <span>Counter: {props.counter}</span>
+      </div>
       <div className={styles['table']}>
         <div></div>
         <h4>№</h4>

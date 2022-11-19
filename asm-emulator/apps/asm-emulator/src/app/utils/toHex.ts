@@ -1,3 +1,5 @@
 export function toHex(value: number): string {
-  return '0x' + value.toString(16);
+  const val = Math.abs(value);
+  if (value < 0) return '-0x' + val.toString(16);
+  else return '0x' + val.toString(16);
 }

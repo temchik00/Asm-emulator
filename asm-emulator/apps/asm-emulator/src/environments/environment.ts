@@ -3,4 +3,5 @@
 
 export const environment = {
   production: false,
+  bitDepth: 8,
 };

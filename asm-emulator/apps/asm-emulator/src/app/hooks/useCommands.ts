@@ -1,46 +1,231 @@
 import { useCallback, useMemo } from 'react';
+import { environment } from '../../environments/environment';
 import { CommandCode } from '../enums/commandCode';
+import { enableBit, splitNumber } from '../utils/bitManipulation';
 
 export function useCommands(
-  memoryPush: (value: number) => void,
-  memoryPop: (amount: number) => number[],
+  {
+    push: stackPush,
+    pop: stackPop,
+    carryFlag,
+    setCarryFlag,
+    zeroFlag,
+    setZeroFlag,
+    signFlag,
+    setSignFlag,
+    peek: stackPeek,
+  }: {
+    memory: number[];
+    setMemory: React.Dispatch<React.SetStateAction<number[]>>;
+    push: (value: number) => void;
+    pop: (amount: number) => number[];
+    carryFlag: boolean;
+    setCarryFlag: (state: boolean) => void;
+    zeroFlag: boolean;
+    setZeroFlag: (state: boolean) => void;
+    signFlag: boolean;
+    setSignFlag: (state: boolean) => void;
+    peek: (amount: number) => number[];
+  },
   pc: number,
-  commandMemory: number[]
+  commandMemory: number[],
+  getMemoryItem: (index: number) => number,
+  setMemoryItem: (index: number, value: number) => void,
+  counter: number,
+  setCounter: React.Dispatch<React.SetStateAction<number>>
 ) {
   const push = useCallback(
     (pc: number, commandMemory: number[]) => {
       pc += 1;
       const value = commandMemory[pc];
-      memoryPush(value);
+      stackPush(value);
       return pc;
     },
-    [memoryPush]
+    [stackPush]
   );
 
   const pop = useCallback(
     (pc: number) => {
-      memoryPop(1);
+      stackPop(1);
       return pc;
     },
-    [memoryPop]
+    [stackPop]
   );
 
   const add = useCallback(
     (pc: number) => {
-      const [val1, val2] = memoryPop(2);
-      memoryPush(val1 + val2);
+      const [val1, val2] = stackPop(2);
+      const result = val1 + val2;
+      const overflow = Math.abs(result) >= enableBit(0, environment.bitDepth);
+      setCarryFlag(overflow);
+      setSignFlag(result < 0);
+      if (overflow) {
+        const [lower, upper] = splitNumber(result, environment.bitDepth);
+        stackPush(lower);
+        stackPush(upper);
+      } else stackPush(result);
       return pc;
     },
-    [memoryPush, memoryPop]
+    [stackPush, stackPop, setCarryFlag, setSignFlag]
+  );
+
+  const adc = useCallback(
+    (pc: number) => {
+      const [val1, val2] = stackPop(2);
+      let result = val1 + val2;
+      if (carryFlag) result += enableBit(0, environment.bitDepth);
+      const overflow = Math.abs(result) >= enableBit(0, environment.bitDepth);
+      setCarryFlag(overflow);
+      setSignFlag(result < 0);
+      if (overflow) {
+        const [lower, upper] = splitNumber(result, environment.bitDepth);
+        stackPush(lower);
+        stackPush(upper);
+      } else stackPush(result);
+      return pc;
+    },
+    [stackPush, stackPop, setCarryFlag, setSignFlag]
+  );
+
+  const mul = useCallback(
+    (pc: number) => {
+      const [val1, val2] = stackPop(2);
+      const result = val1 * val2;
+      const overflow = Math.abs(result) >= enableBit(0, environment.bitDepth);
+      setCarryFlag(overflow);
+      setSignFlag(result < 0);
+      const [lower, upper] = splitNumber(result, environment.bitDepth);
+      stackPush(lower);
+      stackPush(upper);
+      return pc;
+    },
+    [stackPush, stackPop, setCarryFlag, setSignFlag]
   );
 
   const subtruct = useCallback(
     (pc: number) => {
-      const [val1, val2] = memoryPop(2);
-      memoryPush(val1 - val2);
+      const [val1, val2] = stackPop(2);
+      stackPush(val1 - val2);
       return pc;
     },
-    [memoryPush, memoryPop]
+    [stackPush, stackPop]
+  );
+
+  const read = useCallback(
+    (pc: number) => {
+      const address = stackPop(1)[0];
+      const val = getMemoryItem(address);
+      stackPush(val);
+      return pc;
+    },
+    [stackPop, stackPush, getMemoryItem]
+  );
+
+  const write = useCallback(
+    (pc: number) => {
+      const [address, val] = stackPop(2);
+      setMemoryItem(address, val);
+      return pc;
+    },
+    [stackPop, setMemoryItem]
+  );
+
+  const ldc = useCallback(
+    (pc: number) => {
+      const value = stackPeek(1)[0];
+      setCounter(value);
+      return pc;
+    },
+    [stackPeek, setCounter]
+  );
+
+  const stc = useCallback(
+    (pc: number) => {
+      const value = counter;
+      stackPush(value);
+      return pc;
+    },
+    [stackPush, counter]
+  );
+
+  const cmp = useCallback(
+    (pc: number) => {
+      const [val1, val2] = stackPeek(2);
+      if (val1 === val2) setZeroFlag(true);
+      else setZeroFlag(false);
+      if (val1 < val2) setSignFlag(true);
+      else setSignFlag(false);
+      return pc;
+    },
+    [stackPeek]
+  );
+
+  const swap = useCallback(
+    (pc: number) => {
+      const [val1, val2] = stackPop(2);
+      stackPush(val1);
+      stackPush(val2);
+      return pc;
+    },
+    [stackPush, stackPop]
+  );
+
+  const rsc = useCallback(
+    (pc: number) => {
+      setCounter(0);
+      return pc;
+    },
+    [setCounter]
+  );
+
+  const inc = useCallback(
+    (pc: number) => {
+      const value = stackPop(1)[0];
+      stackPush(value + 1);
+      return pc;
+    },
+    [stackPop, stackPush]
+  );
+
+  const incc = useCallback(
+    (pc: number) => {
+      setCounter(counter + 1);
+      return pc;
+    },
+    [counter, setCounter]
+  );
+
+  const decc = useCallback(
+    (pc: number) => {
+      setCounter(counter - 1);
+      return pc;
+    },
+    [counter, setCounter]
+  );
+
+  const cmpc = useCallback(
+    (pc: number) => {
+      const val1 = counter;
+      const val2 = stackPeek(1)[0];
+      if (val1 === val2) setZeroFlag(true);
+      else setZeroFlag(false);
+      if (val1 < val2) setSignFlag(true);
+      else setSignFlag(false);
+      return pc;
+    },
+    [stackPeek, setZeroFlag, setSignFlag, counter]
+  );
+
+  const jne = useCallback(
+    (pc: number, commandMemory: number[]) => {
+      pc += 1;
+      const address = commandMemory[pc];
+      if (!zeroFlag) pc = address;
+      setZeroFlag(false);
+      setSignFlag(false);
+      return pc;
+    },
+    [zeroFlag, setZeroFlag, setSignFlag]
   );
 
   const commands = useMemo((): Map<CommandCode, () => number> => {
@@ -49,7 +234,42 @@ export function useCommands(
     map.set(CommandCode.Pop, () => pop(pc));
     map.set(CommandCode.Add, () => add(pc));
     map.set(CommandCode.Sub, () => subtruct(pc));
+    map.set(CommandCode.Adc, () => adc(pc));
+    map.set(CommandCode.Mul, () => mul(pc));
+    map.set(CommandCode.Read, () => read(pc));
+    map.set(CommandCode.Write, () => write(pc));
+    map.set(CommandCode.LDC, () => ldc(pc));
+    map.set(CommandCode.STC, () => stc(pc));
+    map.set(CommandCode.Cmp, () => cmp(pc));
+    map.set(CommandCode.Swap, () => swap(pc));
+    map.set(CommandCode.RsC, () => rsc(pc));
+    map.set(CommandCode.IncC, () => incc(pc));
+    map.set(CommandCode.DecC, () => decc(pc));
+    map.set(CommandCode.CmpC, () => cmpc(pc));
+    map.set(CommandCode.Jne, () => jne(pc, commandMemory));
+    map.set(CommandCode.Inc, () => inc(pc));
     return map;
-  }, [pc, commandMemory, push, pop, add, subtruct]);
+  }, [
+    pc,
+    commandMemory,
+    push,
+    pop,
+    add,
+    subtruct,
+    adc,
+    mul,
+    read,
+    write,
+    ldc,
+    stc,
+    cmp,
+    swap,
+    rsc,
+    incc,
+    decc,
+    cmpc,
+    jne,
+    inc,
+  ]);
   return { commands };
 }
