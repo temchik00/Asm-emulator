@@ -14,7 +14,7 @@ export const CommandDescription = {
   [CommandCode.MUL]: { name: 'Mul', params: [] },
   [CommandCode.READ]: { name: 'Read', params: [] },
   [CommandCode.WRITE]: { name: 'Write', params: [] },
-  [CommandCode.LDC]: { name: 'LSC', params: [] },
+  [CommandCode.LDC]: { name: 'LDC', params: [] },
   [CommandCode.STC]: { name: 'STC', params: [] },
   [CommandCode.CMP]: { name: 'Cmp', params: [] },
   [CommandCode.SWAP]: { name: 'Swap', params: [] },
@@ -22,6 +22,26 @@ export const CommandDescription = {
   [CommandCode.INCC]: { name: 'IncC', params: [] },
   [CommandCode.DECC]: { name: 'DecC', params: [] },
   [CommandCode.CMPC]: { name: 'CmpC', params: [] },
+  [CommandCode.JMP]: {
+    name: 'Jmp',
+    params: [
+      {
+        name: 'Label',
+        description: 'Address to jump to',
+        type: 'label',
+      },
+    ],
+  },
+  [CommandCode.JE]: {
+    name: 'Je',
+    params: [
+      {
+        name: 'Label',
+        description: 'Address to jump to if zero flag is set',
+        type: 'label',
+      },
+    ],
+  },
   [CommandCode.JNE]: {
     name: 'Jne',
     params: [

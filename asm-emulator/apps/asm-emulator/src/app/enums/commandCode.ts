@@ -15,6 +15,8 @@ export enum CommandCode {
   INCC = 0xd,
   DECC = 0xe,
   CMPC = 0xf,
-  JNE = 0x10,
-  INC = 0x11,
+  JMP = 0x10,
+  JE = 0x11,
+  JNE = 0x12,
+  INC = 0x13,
 }

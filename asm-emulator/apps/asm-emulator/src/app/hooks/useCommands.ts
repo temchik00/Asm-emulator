@@ -132,7 +132,7 @@ export function useCommands(
 
   const ldc = useCallback(
     (pc: number) => {
-      const value = stackPeek(1)[0];
+      const value = stackPop(1)[0];
       setCounter(value);
       return pc;
     },
@@ -228,6 +228,25 @@ export function useCommands(
     [zeroFlag, setZeroFlag, setSignFlag]
   );
 
+  const jmp = useCallback((pc: number, commandMemory: number[]) => {
+    pc += 1;
+    const address = commandMemory[pc];
+    pc = address - 1;
+    return pc;
+  }, []);
+
+  const je = useCallback(
+    (pc: number, commandMemory: number[]) => {
+      pc += 1;
+      const address = commandMemory[pc];
+      if (zeroFlag) pc = address - 1;
+      setZeroFlag(false);
+      setSignFlag(false);
+      return pc;
+    },
+    [zeroFlag, setZeroFlag, setSignFlag]
+  );
+
   const commands = useMemo((): Map<CommandCode, () => number> => {
     let map = new Map<CommandCode, () => number>();
     map.set(CommandCode.PUSH, () => push(pc, commandMemory));
@@ -247,7 +266,9 @@ export function useCommands(
     map.set(CommandCode.DECC, () => decc(pc));
     map.set(CommandCode.CMPC, () => cmpc(pc));
     map.set(CommandCode.JNE, () => jne(pc, commandMemory));
+    map.set(CommandCode.JMP, () => jmp(pc, commandMemory));
     map.set(CommandCode.INC, () => inc(pc));
+    map.set(CommandCode.JE, () => je(pc, commandMemory));
     return map;
   }, [
     pc,
@@ -269,7 +290,9 @@ export function useCommands(
     decc,
     cmpc,
     jne,
+    jmp,
     inc,
+    je,
   ]);
   return { commands };
 }
