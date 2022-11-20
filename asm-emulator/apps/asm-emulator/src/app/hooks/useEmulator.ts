@@ -8,7 +8,8 @@ export function useEmulator() {
   const stack = useStackMemory();
   const { pc, setPc, commandMemory, setCommandMemory, counter, setCounter } =
     useCommandMemory();
-  const { memory, getItem, setItem } = useMemory();
+  const { memory, getItem, setItem, pushItem, pushItems, clearMemory } =
+    useMemory();
   const { commands } = useCommands(
     stack,
     pc,
@@ -51,6 +52,8 @@ export function useEmulator() {
     step,
     setCommandMemory,
     execute,
-    setItem,
+    pushItem,
+    pushItems,
+    clearMemory
   };
 }

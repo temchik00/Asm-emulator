@@ -1,73 +1,47 @@
-import { memo, useEffect, useMemo } from 'react';
-import CommandsList from './components/commands-list/commands-list';
-import MemoryList from './components/memory-list/memory-list';
-import FlagList from './components/flag-list/flag-list';
-import { CommandCode } from './enums/commandCode';
-import { useEmulator } from './hooks/useEmulator';
-import StackList from './components/stack-list/stack-list';
+import { useCallback, useState } from 'react';
+import Emulator from './pages/emulator/emulator';
+import Redactor from './pages/redactor/redactor';
+import { compile } from './utils/compile';
 
 export function App() {
-  const {
-    memory,
-    stack,
-    pc,
-    commandMemory,
-    counter,
-    setCommandMemory,
-    step,
-    execute,
-    setItem,
-  } = useEmulator();
-  useEffect(() => {
-    setItem(0, 9);
-    setItem(1, 2);
-    setItem(2, 4);
-    setItem(3, 8);
-    setItem(4, 16);
-    setItem(5, 8);
-    setItem(6, 4);
-    setItem(7, 2);
-    setItem(8, 4);
-    setItem(9, 5);
-    setCommandMemory([
-      CommandCode.Push,
-      0,
-      CommandCode.Read,
-      CommandCode.RsC,
-      CommandCode.Push,
-      0,
-      CommandCode.Swap,
-
-      CommandCode.Swap,
-      CommandCode.IncC,
-      CommandCode.STC,
-      CommandCode.Read,
-      CommandCode.Add,
-      CommandCode.Swap,
-      CommandCode.CmpC,
-      CommandCode.Jne,
-      6,
-      CommandCode.Inc,
-      CommandCode.Write,
-    ]);
-  }, []);
-  const flags = useMemo(() => {
-    return [
-      { state: stack.carryFlag, name: 'carry' },
-      { state: stack.zeroFlag, name: 'zero' },
-      { state: stack.signFlag, name: 'sign' },
-    ];
-  }, [stack]);
+  const [page, setPage] = useState<'emulator' | 'redactor'>('redactor');
+  const [data, setData] = useState<string>('');
+  const [code, setCode] = useState<string>('');
+  const [compiledData, setCompiledData] = useState<Array<number>>([]);
+  const [compiledCode, setCompiledCode] = useState<Array<number>>([]);
+  const [error, setError] = useState<string | undefined>(undefined);
+  const compileAll = useCallback(() => {
+    try {
+      const { data: compData, code: compCode } = compile(data, code);
+      setError(undefined);
+      setCompiledData(compData);
+      setCompiledCode(compCode);
+      setPage('emulator');
+    } catch (err) {
+      setError((err as Error).message);
+    }
+  }, [error, data, code]);
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <MemoryList memory={memory} />
-        <StackList memory={stack.memory} />
-        <FlagList flags={flags} binaryFlags={stack.flags} />
-        <CommandsList pc={pc} commands={commandMemory} counter={counter} />
-      </div>
-      <button onClick={step}>Step</button>
-      <button onClick={execute}>Execute</button>
+      {page === 'emulator' ? (
+        <Emulator compiledData={compiledData} compiledCode={compiledCode} />
+      ) : (
+        <Redactor
+          data={data}
+          code={code}
+          setData={setData}
+          setCode={setCode}
+          error={error}
+          compileAll={compileAll}
+        />
+      )}
+      <button
+        onClick={() => {
+          page === 'emulator' ? setPage('redactor') : setPage('emulator');
+        }}
+      >
+        switch
+      </button>
     </>
   );
 }

@@ -1,0 +1,32 @@
+.container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.buttons-container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.data-input,
+.commands-input {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 10px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.data-input {
+  height: 90px;
+}
+
+.commands-input {
+  height: 400px;
+}

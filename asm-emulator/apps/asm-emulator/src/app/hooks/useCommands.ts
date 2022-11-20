@@ -189,7 +189,7 @@ export function useCommands(
 
   const incc = useCallback(
     (pc: number) => {
-      setCounter(counter + 1);
+      setCounter((counter) => counter + 1);
       return pc;
     },
     [counter, setCounter]
@@ -197,7 +197,7 @@ export function useCommands(
 
   const decc = useCallback(
     (pc: number) => {
-      setCounter(counter - 1);
+      setCounter((counter) => counter - 1);
       return pc;
     },
     [counter, setCounter]
@@ -220,7 +220,7 @@ export function useCommands(
     (pc: number, commandMemory: number[]) => {
       pc += 1;
       const address = commandMemory[pc];
-      if (!zeroFlag) pc = address;
+      if (!zeroFlag) pc = address - 1;
       setZeroFlag(false);
       setSignFlag(false);
       return pc;
@@ -230,24 +230,24 @@ export function useCommands(
 
   const commands = useMemo((): Map<CommandCode, () => number> => {
     let map = new Map<CommandCode, () => number>();
-    map.set(CommandCode.Push, () => push(pc, commandMemory));
-    map.set(CommandCode.Pop, () => pop(pc));
-    map.set(CommandCode.Add, () => add(pc));
-    map.set(CommandCode.Sub, () => subtruct(pc));
-    map.set(CommandCode.Adc, () => adc(pc));
-    map.set(CommandCode.Mul, () => mul(pc));
-    map.set(CommandCode.Read, () => read(pc));
-    map.set(CommandCode.Write, () => write(pc));
+    map.set(CommandCode.PUSH, () => push(pc, commandMemory));
+    map.set(CommandCode.POP, () => pop(pc));
+    map.set(CommandCode.ADD, () => add(pc));
+    map.set(CommandCode.SUB, () => subtruct(pc));
+    map.set(CommandCode.ADC, () => adc(pc));
+    map.set(CommandCode.MUL, () => mul(pc));
+    map.set(CommandCode.READ, () => read(pc));
+    map.set(CommandCode.WRITE, () => write(pc));
     map.set(CommandCode.LDC, () => ldc(pc));
     map.set(CommandCode.STC, () => stc(pc));
-    map.set(CommandCode.Cmp, () => cmp(pc));
-    map.set(CommandCode.Swap, () => swap(pc));
-    map.set(CommandCode.RsC, () => rsc(pc));
-    map.set(CommandCode.IncC, () => incc(pc));
-    map.set(CommandCode.DecC, () => decc(pc));
-    map.set(CommandCode.CmpC, () => cmpc(pc));
-    map.set(CommandCode.Jne, () => jne(pc, commandMemory));
-    map.set(CommandCode.Inc, () => inc(pc));
+    map.set(CommandCode.CMP, () => cmp(pc));
+    map.set(CommandCode.SWAP, () => swap(pc));
+    map.set(CommandCode.RSC, () => rsc(pc));
+    map.set(CommandCode.INCC, () => incc(pc));
+    map.set(CommandCode.DECC, () => decc(pc));
+    map.set(CommandCode.CMPC, () => cmpc(pc));
+    map.set(CommandCode.JNE, () => jne(pc, commandMemory));
+    map.set(CommandCode.INC, () => inc(pc));
     return map;
   }, [
     pc,

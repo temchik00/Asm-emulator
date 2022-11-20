@@ -18,5 +18,25 @@ export function useMemory() {
     },
     [memory]
   );
-  return { memory, getItem, setItem };
+  const pushItem = useCallback(
+    (value: number) => {
+      setMemory((memory) => {
+        return [...memory, value];
+      });
+    },
+    [memory]
+  );
+
+  const pushItems = useCallback(
+    (values: number[]) => {
+      setMemory((memory) => [...memory, ...values]);
+    },
+    [memory]
+  );
+
+  const clearMemory = useCallback(() => {
+    setMemory([]);
+  }, [memory]);
+
+  return { memory, getItem, setItem, pushItem, pushItems, clearMemory };
 }
