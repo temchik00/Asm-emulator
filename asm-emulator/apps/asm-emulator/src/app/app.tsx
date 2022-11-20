@@ -20,11 +20,20 @@ export function App() {
     } catch (err) {
       setError((err as Error).message);
     }
-  }, [error, data, code]);
+  }, [error, data, code, page]);
+
+  const toEditor = useCallback(() => {
+    setPage('redactor');
+  }, [page]);
+
   return (
     <>
       {page === 'emulator' ? (
-        <Emulator compiledData={compiledData} compiledCode={compiledCode} />
+        <Emulator
+          compiledData={compiledData}
+          compiledCode={compiledCode}
+          toEditor={toEditor}
+        />
       ) : (
         <Redactor
           data={data}
@@ -35,13 +44,6 @@ export function App() {
           compileAll={compileAll}
         />
       )}
-      <button
-        onClick={() => {
-          page === 'emulator' ? setPage('redactor') : setPage('emulator');
-        }}
-      >
-        switch
-      </button>
     </>
   );
 }

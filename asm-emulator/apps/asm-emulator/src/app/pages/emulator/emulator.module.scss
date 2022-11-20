@@ -1,7 +1,18 @@
-/*
- * Replace this with your own classes
- *
- * e.g.
- * .container {
- * }
-*/
+.container {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  height: 100%;
+}
+
+.buttons-container {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+}
+
+.editor-button {
+  margin-left: auto;
+}

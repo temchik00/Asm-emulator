@@ -3,6 +3,8 @@
   display: flex;
   flex-direction: column;
   gap: 15px;
+  padding: 20px;
+  height: 100%;
 }
 
 .buttons-container {
@@ -12,8 +14,19 @@
   gap: 10px;
 }
 
+.input-block{
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 auto;
+}
+
+.code-block{
+  flex: 1 1 auto;
+}
+
 .data-input,
 .commands-input {
+  font-family: 'Courier New', Courier, monospace;
   width: 100%;
   resize: vertical;
   border: 1px solid #000;
@@ -21,12 +34,9 @@
   padding: 10px;
   box-sizing: border-box;
   outline: none;
+  flex: 1 1 auto;
 }
 
 .data-input {
   height: 90px;
-}
-
-.commands-input {
-  height: 400px;
 }
