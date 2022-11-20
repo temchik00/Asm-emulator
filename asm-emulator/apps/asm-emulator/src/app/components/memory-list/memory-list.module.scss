@@ -1,7 +1,32 @@
-
+.container {
+  h3 {
+    text-align: center;
+  }
+}
 
 .memory-table {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 0 15px;
+  grid-gap: 0px 0px;
+  &-header {
+    margin: 12px 4px;
+  }
+  * {
+    text-align: center;
+  }
+
+  .memory-id,
+  .memory-val {
+    font-family: monospace;
+    font-size: 14px;
+    // border: 1px solid wheat;
+    // border-bottom: 1px solid wheat;
+  }
+
+  .memory-id:nth-child(4n + 1) {
+    background-color: rgb(39, 40, 34);
+  }
+  .memory-val:nth-child(4n + 2) {
+    background-color: rgb(39, 40, 34);
+  }
 }

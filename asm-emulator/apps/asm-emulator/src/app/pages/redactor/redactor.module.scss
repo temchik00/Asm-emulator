@@ -2,7 +2,6 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 15px;
   padding: 20px;
   height: 100%;
 }
@@ -12,31 +11,28 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
+  margin-bottom: 15px;
 }
 
-.input-block{
-  display: flex;
-  flex-direction: column;
-  flex: 0 1 auto;
-}
-
-.code-block{
-  flex: 1 1 auto;
-}
-
-.data-input,
-.commands-input {
-  font-family: 'Courier New', Courier, monospace;
-  width: 100%;
-  resize: vertical;
-  border: 1px solid #000;
-  border-radius: 5px;
-  padding: 10px;
-  box-sizing: border-box;
-  outline: none;
-  flex: 1 1 auto;
+.label {
+  margin-bottom: 3px;
 }
 
 .data-input {
-  height: 90px;
+  height: 125px;
+  margin-bottom: 15px;
+}
+
+.commands-input {
+  flex: 1 1 auto;
+  margin-bottom: 15px;
+}
+
+.error-message {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px;
+  background-color: rgba(255, 0, 0, 0.3);
+  border-radius: 5px;
+  margin-bottom: 15px;
 }

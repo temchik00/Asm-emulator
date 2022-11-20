@@ -1,10 +1,37 @@
 .flag {
+  h3 {
+    text-align: center;
+  }
+
+  &-binary {
+    &-header {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    &-value {
+      font-size: 16px;
+      font-weight: 500;
+      font-family: monospace;
+    }
+  }
+
+  h4 {
+    font-size: 16px;
+    margin: 12px 0 6px;
+    text-align: center;
+  }
   &-table {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 0 15px;
+    font-size: 14px;
   }
   &-name {
     font-weight: bold;
+    text-align: end;
+  }
+  &-val {
+    text-align: left;
+    font-family: monospace;
   }
 }

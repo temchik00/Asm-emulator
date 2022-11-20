@@ -1,14 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
-html, body{
-    margin: 0;
-    padding: 0;
-    height: 100vh;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: rgb(30, 31, 28);
+  color: rgb(248, 248, 248);
+  font-family: Arial, Helvetica, sans-serif;
 }
 
-#root{
-    height: 100%;
+#root {
+  height: 100%;
 }
 
-h3{
-    margin-top: 0;
+h3 {
+  margin-top: 0;
+}
+
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(154, 154, 154) transparent;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-left: 1px solid rgba(220, 220, 220, 0.4);
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(220, 220, 220, 0.4);
+}
+
+.scrollbar::-webkit-scrollbar-button {
+  display: none;
+}
+
+.scrollbar::-webkit-scrollbar-corner {
+  display: none;
+}
+
+.scrollbar::-webkit-resizer {
+  display: none;
 }

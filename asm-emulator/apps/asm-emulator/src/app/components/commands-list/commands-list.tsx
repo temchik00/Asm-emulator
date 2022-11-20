@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { CommandCode } from '../../enums/commandCode';
 import { CommandDescription } from '../../utils/commandDescriptions';
 import { toBinary } from '../../utils/toBinary';
@@ -14,18 +14,24 @@ export interface CommandsListProps {
 
 const Command = memo(
   (props: { active: boolean; index: number; command: number }) => {
+    const cls = useMemo(() => {
+      return `${styles['table-val']} ${
+        props.index % 2 === 1 ? styles['table-val-light'] : ''
+      }`;
+    }, [props.index]);
+
     return (
       <>
         <div>{props.active ? '→' : ''}</div>
-        <div>{props.index}</div>
-        <div>
+        <div className={cls}>{props.index}</div>
+        <div className={cls}>
           {props.command in CommandDescription
             ? CommandDescription[props.command as CommandCode].name
             : 'number'}
         </div>
-        <div>{toBinary(props.command)}</div>
-        <div>{toHex(props.command)}</div>
-        <div>{props.command}</div>
+        <div className={cls}>{toBinary(props.command)}</div>
+        <div className={cls}>{toHex(props.command)}</div>
+        <div className={cls}>{props.command}</div>
       </>
     );
   }
@@ -36,8 +42,12 @@ export function CommandsList(props: CommandsListProps) {
     <div className={styles['container']}>
       <h3>Commands realted memory</h3>
       <div className={styles['vars']}>
-        <span>PC: {props.pc}</span>
-        <span>Counter: {props.counter}</span>
+        <span>
+          PC: <span className={styles['value']}>{props.pc}</span>
+        </span>
+        <span>
+          Counter: <span className={styles['value']}>{props.counter}</span>
+        </span>
       </div>
       <div className={styles['table']}>
         <div></div>

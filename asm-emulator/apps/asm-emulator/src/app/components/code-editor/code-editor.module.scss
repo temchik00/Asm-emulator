@@ -1,0 +1,42 @@
+.container {
+  box-sizing: border-box;
+  width: 100%;
+  resize: vertical;
+  background-color: rgb(39, 40, 34);
+  border-radius: 2px;
+  overflow: auto;
+  padding: 10px 10px 10px 15px;
+}
+
+.wrapper {
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  border-radius: 5px;
+}
+
+.numbers,
+.editor {
+  font-size: 14px;
+  line-height: 1.3em;
+  box-sizing: border-box;
+  background-color: rgb(39, 40, 34);
+  font-family: 'consolas';
+  font-weight: 500;
+}
+
+.numbers {
+  width: 25px;
+  text-align: end;
+  color: rgb(154, 154, 154);
+  margin-right: 16px;
+}
+
+.editor {
+  padding: 0;
+  resize: none;
+  border: none;
+  outline: none;
+  color: rgb(248, 248, 248);
+  flex: 1 1 auto;
+}

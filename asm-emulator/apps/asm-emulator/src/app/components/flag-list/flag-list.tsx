@@ -24,10 +24,15 @@ const Flag = memo((props: IFlag) => {
 
 export function FlagList(props: FlagListProps) {
   return (
-    <div className={styles['container']}>
+    <div className={styles['flag']}>
       <h3>Flags</h3>
-      <h4>Binary repr</h4>
-      <div>{toBinary(props.binaryFlags)}</div>
+      <span className={styles['flag-binary-header']}>
+        Binary repr:{' '}
+        <span className={styles['flag-binary-value']}>
+          {toBinary(props.binaryFlags)}
+        </span>
+      </span>
+
       <h4>Individual flags</h4>
       <div className={styles['flag-table']}>
         {props.flags.map((element, index) => (

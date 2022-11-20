@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import CodeEditor from '../../components/code-editor/code-editor';
 import styles from './redactor.module.scss';
 
 /* eslint-disable-next-line */
@@ -63,28 +64,28 @@ export function Redactor(props: RedactorProps) {
           Load
         </button>
       </div>
-      <div className={styles['input-block']}>
-        <label htmlFor="data">Data</label>
-        <textarea
-          value={props.data}
-          onChange={(e) => {
-            props.setData(e.target.value);
-          }}
-          className={styles['data-input']}
-          id="data"
-        ></textarea>
-      </div>
-      <div className={`${styles['input-block']} ${styles['code-block']}`} style={{flex: '1 1 auto'}}>
-        <label htmlFor="commands">Code</label>
-        <textarea
-          value={props.code}
-          onChange={(e) => {
-            props.setCode(e.target.value);
-          }}
-          className={styles['commands-input']}
-          id="commands"
-        ></textarea>
-      </div>
+      <label htmlFor="data" className={styles['label']}>
+        Data
+      </label>
+      <CodeEditor
+        value={props.data}
+        onChange={(e) => {
+          props.setData(e.target.value);
+        }}
+        className={styles['data-input']}
+        id="data"
+      />
+      <label htmlFor="commands" className={styles['label']}>
+        Code
+      </label>
+      <CodeEditor
+        value={props.code}
+        onChange={(e) => {
+          props.setCode(e.target.value);
+        }}
+        className={styles['commands-input']}
+        id="commands"
+      />
       {props.error && (
         <div className={styles['error-message']}>{props.error}</div>
       )}

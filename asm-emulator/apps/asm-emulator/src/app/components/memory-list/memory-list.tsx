@@ -20,6 +20,8 @@ export function MemoryList(props: MemoryListProps) {
     <div className={styles['container']}>
       <h3>Memory</h3>
       <div className={styles['memory-table']}>
+        <h4 className={styles['memory-table-header']}>Pos</h4>
+        <h4 className={styles['memory-table-header']}>Value</h4>
         {props.memory.map((element, index) => (
           <MemoryItem key={index} index={index} val={element} />
         ))}

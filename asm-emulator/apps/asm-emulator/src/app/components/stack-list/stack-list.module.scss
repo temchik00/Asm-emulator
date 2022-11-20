@@ -1,7 +1,11 @@
-/*
- * Replace this with your own classes
- *
- * e.g.
- * .container {
- * }
-*/
+.table {
+  display: flex;
+  flex-direction: column;
+  // gap: 6px 10px;
+  font-family: monospace;
+  font-size: 14px;
+  text-align: center;
+  *:nth-child(even) {
+    background-color: rgb(39, 40, 34);
+  }
+}
