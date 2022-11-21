@@ -19,4 +19,8 @@ export enum CommandCode {
   JE = 0x11,
   JNE = 0x12,
   INC = 0x13,
+  ROR = 0x14,
+  ROL = 0x15,
+  RORN = 0x16,
+  ROLN = 0x17,
 }

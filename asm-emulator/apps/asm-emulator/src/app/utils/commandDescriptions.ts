@@ -53,4 +53,54 @@ export const CommandDescription = {
     ],
   },
   [CommandCode.INC]: { name: 'Inc', params: [] },
+  [CommandCode.ROR]: {
+    name: 'Ror',
+    params: [
+      {
+        name: 'amount',
+        description: 'Amount of values to rotate',
+        type: 'int',
+      },
+    ],
+  },
+  [CommandCode.ROL]: {
+    name: 'Rol',
+    params: [
+      {
+        name: 'amount',
+        description: 'Amount of values to rotate',
+        type: 'int',
+      },
+    ],
+  },
+  [CommandCode.RORN]: {
+    name: 'RorN',
+    params: [
+      {
+        name: 'amount',
+        description: 'Amount of values to rotate',
+        type: 'int',
+      },
+      {
+        name: 'n',
+        description: 'How many times to rotate',
+        type: 'int',
+      },
+    ],
+  },
+  [CommandCode.ROLN]: {
+    name: 'RolN',
+    params: [
+      {
+        name: 'amount',
+        description: 'Amount of values to rotate',
+        type: 'int',
+      },
+      {
+        name: 'n',
+        description: 'How many times to rotate',
+        type: 'int',
+      },
+    ],
+  },
 };

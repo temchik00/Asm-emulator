@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { environment } from '../../environments/environment';
 import { CommandCode } from '../enums/commandCode';
+import { arrayRotate } from '../utils/arrayRotate';
 import { enableBit, splitNumber } from '../utils/bitManipulation';
 
 export function useCommands(
@@ -247,6 +248,62 @@ export function useCommands(
     [zeroFlag, setZeroFlag, setSignFlag]
   );
 
+  const ror = useCallback(
+    (pc: number, commandMemory: number[]) => {
+      pc += 1;
+      const amount = commandMemory[pc];
+      let arr = stackPop(amount);
+      arr = arrayRotate(arr, true);
+      arr.reverse().forEach((val) => stackPush(val));
+      return pc;
+    },
+    [stackPop, stackPush]
+  );
+
+  const rol = useCallback(
+    (pc: number, commandMemory: number[]) => {
+      pc += 1;
+      const amount = commandMemory[pc];
+      let arr = stackPop(amount);
+      arr = arrayRotate(arr);
+      arr.reverse().forEach((val) => stackPush(val));
+      return pc;
+    },
+    [stackPop, stackPush]
+  );
+
+  const rorn = useCallback(
+    (pc: number, commandMemory: number[]) => {
+      pc += 1;
+      const amount = commandMemory[pc];
+      let arr = stackPop(amount);
+      pc += 1;
+      const n = commandMemory[pc];
+      for (let i = 0; i < n; i++) {
+        arr = arrayRotate(arr, true);
+      }
+      arr.reverse().forEach((val) => stackPush(val));
+      return pc;
+    },
+    [stackPop, stackPush]
+  );
+
+  const roln = useCallback(
+    (pc: number, commandMemory: number[]) => {
+      pc += 1;
+      const amount = commandMemory[pc];
+      let arr = stackPop(amount);
+      pc += 1;
+      const n = commandMemory[pc];
+      for (let i = 0; i < n; i++) {
+        arr = arrayRotate(arr);
+      }
+      arr.reverse().forEach((val) => stackPush(val));
+      return pc;
+    },
+    [stackPop, stackPush]
+  );
+
   const commands = useMemo((): Map<CommandCode, () => number> => {
     let map = new Map<CommandCode, () => number>();
     map.set(CommandCode.PUSH, () => push(pc, commandMemory));
@@ -269,6 +326,10 @@ export function useCommands(
     map.set(CommandCode.JMP, () => jmp(pc, commandMemory));
     map.set(CommandCode.INC, () => inc(pc));
     map.set(CommandCode.JE, () => je(pc, commandMemory));
+    map.set(CommandCode.ROR, () => ror(pc, commandMemory));
+    map.set(CommandCode.ROL, () => rol(pc, commandMemory));
+    map.set(CommandCode.RORN, () => rorn(pc, commandMemory));
+    map.set(CommandCode.ROLN, () => roln(pc, commandMemory));
     return map;
   }, [
     pc,
@@ -293,6 +354,10 @@ export function useCommands(
     jmp,
     inc,
     je,
+    ror,
+    rol,
+    rorn,
+    roln,
   ]);
   return { commands };
 }
