@@ -12,17 +12,19 @@
   box-sizing: border-box;
   width: 100%;
   display: flex;
-  border-radius: 5px;
+  border-radius: 2px;
+  font-size: 16px;
+  line-height: 1.2em;
 }
 
 .numbers,
 .editor {
-  font-size: 14px;
-  line-height: 1.3em;
   box-sizing: border-box;
   background-color: rgb(39, 40, 34);
   font-family: 'consolas';
   font-weight: 500;
+  font-size: 16px;
+  line-height: 1.2em;
 }
 
 .numbers {
@@ -62,8 +64,6 @@
   pointer-events: none;
   font-family: 'consolas';
   font-weight: 500;
-  font-size: 14px;
-  line-height: 1.3em;
   background-color: transparent;
 }
 

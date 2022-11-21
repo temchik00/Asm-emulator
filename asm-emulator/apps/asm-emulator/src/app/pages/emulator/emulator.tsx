@@ -41,11 +41,11 @@ export function Emulator(props: EmulatorProps) {
   }, [stack]);
   return (
     <div className={styles['container']}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <MemoryList memory={memory} />
-        <StackList memory={stack.memory} />
+      <div className={styles['info-container']}>
         <FlagList flags={flags} binaryFlags={stack.flags} />
+        <StackList memory={stack.memory} />
         <CommandsList pc={pc} commands={commandMemory} counter={counter} />
+        <MemoryList memory={memory} />
       </div>
       <div className={styles['buttons-container']}>
         <button onClick={step}>Step</button>

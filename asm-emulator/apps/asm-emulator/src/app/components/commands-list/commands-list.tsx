@@ -49,7 +49,7 @@ export function CommandsList(props: CommandsListProps) {
           Counter: <span className={styles['value']}>{props.counter}</span>
         </span>
       </div>
-      <div className={styles['table']}>
+      <div className={`${styles['table']} scrollbar`}>
         <div></div>
         <h4>№</h4>
         <h4>Name</h4>

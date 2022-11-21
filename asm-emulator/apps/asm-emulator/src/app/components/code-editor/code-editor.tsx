@@ -77,6 +77,7 @@ export function CodeEditor(props: CodeEditorProps) {
           <textarea
             className={`${styles['editor']}`}
             value={props.value}
+            spellCheck={false}
             onChange={(e) => {
               props.onChange(e);
             }}

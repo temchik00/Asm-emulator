@@ -2,7 +2,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 2% 4%;
   height: 100%;
 }
 
@@ -16,6 +16,7 @@
 
 .label {
   margin-bottom: 3px;
+  font-size: 22px;
 }
 
 .data-input {
@@ -32,7 +33,7 @@
   font-size: 14px;
   font-weight: 500;
   padding: 10px;
-  background-color: rgba(255, 0, 0, 0.3);
-  border-radius: 5px;
+  background-color: rgba(242, 37, 22, 0.25);
+  border-radius: 2px;
   margin-bottom: 15px;
 }
