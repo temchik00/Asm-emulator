@@ -1,5 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import CodeEditor from '../../components/code-editor/code-editor';
+import { CommandDescription } from '../../utils/commandDescriptions';
+import { getLabelsSet, getVariablesSet } from '../../utils/compile';
 import styles from './redactor.module.scss';
 
 /* eslint-disable-next-line */
@@ -13,6 +15,25 @@ export interface RedactorProps {
 }
 
 export function Redactor(props: RedactorProps) {
+  const [variables, setVariables] = useState<Set<string>>(new Set<string>());
+  const [labels, setLabels] = useState<Set<string>>(new Set<string>());
+  const types = new Set(['INT', 'VEC']);
+  const commands = useMemo(() => {
+    return new Set(
+      Object.values(CommandDescription).map((command) => command.name.toLocaleUpperCase())
+    );
+  }, [CommandDescription]);
+
+  useEffect(() => {
+    const variables = getVariablesSet(props.data);
+    setVariables(variables);
+  }, [props.data]);
+
+  useEffect(() => {
+    const labels = getLabelsSet(props.code);
+    setLabels(labels);
+  }, [props.code]);
+
   const save = useCallback(() => {
     const dataLines = props.data.split('\n').length;
     const blob = new Blob(
@@ -54,6 +75,37 @@ export function Redactor(props: RedactorProps) {
     input.click();
   }, [props.setData, props.setCode]);
 
+  const highlightData = useCallback(
+    (word: string) => {
+      word = word.toLocaleUpperCase();
+      if (types.has(word)) {
+        return 'editor-type';
+      } else if (variables.has(word)) {
+        return 'editor-variable';
+      } else {
+        return 'editor-default';
+      }
+    },
+    [variables]
+  );
+
+  const highlightCode = useCallback(
+    (word: string) => {
+      word = word.replace(':', '').toLocaleUpperCase();
+
+      if (commands.has(word)) {
+        return 'editor-command';
+      } else if (labels.has(word)) {
+        return 'editor-label';
+      } else if (variables.has(word)) {
+        return 'editor-variable';
+      } else {
+        return 'editor-default';
+      }
+    },
+    [labels, variables, commands]
+  );
+
   return (
     <div className={styles['container']}>
       <div className={styles['buttons-container']}>
@@ -72,6 +124,7 @@ export function Redactor(props: RedactorProps) {
         onChange={(e) => {
           props.setData(e.target.value);
         }}
+        highlight={highlightData}
         className={styles['data-input']}
         id="data"
       />
@@ -83,6 +136,7 @@ export function Redactor(props: RedactorProps) {
         onChange={(e) => {
           props.setCode(e.target.value);
         }}
+        highlight={highlightCode}
         className={styles['commands-input']}
         id="commands"
       />

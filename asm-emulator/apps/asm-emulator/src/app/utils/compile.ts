@@ -14,7 +14,7 @@ function getDataValues(dataSource: string): {
 } {
   let dataValues: Array<number> = [];
   let variables = new Map<string, number>();
-  let dataLines = dataSource.trim().split(';');
+  let dataLines = dataSource.split('\n');
   dataLines = dataLines.map((line) => line.trim());
   dataLines.forEach((line, index) => {
     if (line.length === 0 || line.startsWith('//')) return;
@@ -55,14 +55,9 @@ function getCommandValues(
 ): Array<number> {
   let labels = new Map<string, number>();
   let codes: number[] = [];
-  let commandLines = commandSource.trim().split(';');
+  let commandLines = commandSource.split('\n');
   let commandCount = 0;
   commandLines = commandLines.map((line) => line.trim());
-  let lines: string[] = [];
-  commandLines.forEach((element) => {
-    lines.push(...element.split('\n').map((line) => line.trim()));
-  });
-  commandLines = lines;
   commandLines.forEach((line, index) => {
     if (line.length === 0 || line.startsWith('//')) return;
     const commands = line.split(' ');
@@ -125,4 +120,35 @@ function getCommandValues(
     });
   });
   return codes;
+}
+
+export function getVariablesSet(dataSource: string) {
+  let variables = new Set<string>();
+  let dataLines = dataSource.trim().split('\n');
+  dataLines = dataLines.map((line) => line.trim());
+  dataLines.forEach((line, index) => {
+    if (line.length === 0 || line.startsWith('//')) return;
+    const data = line.split(' ');
+    if (data.length < 2) return;
+    data.shift();
+
+    const name = data[0].toLocaleUpperCase();
+    variables.add(name);
+  });
+  return variables;
+}
+
+export function getLabelsSet(commandSource: string) {
+  let labels = new Set<string>();
+  let commandLines = commandSource.trim().split('\n');
+  commandLines = commandLines.map((line) => line.trim());
+  commandLines.forEach((line, index) => {
+    if (line.length === 0 || line.startsWith('//')) return;
+    let commands = line.split(' ');
+    if (commands[0].endsWith(':')) {
+      const label = commands[0].slice(0, -1).toLocaleUpperCase();
+      labels.add(label);
+    }
+  });
+  return labels;
 }
