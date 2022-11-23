@@ -188,6 +188,15 @@ export function useCommands(
     [stackPop, stackPush]
   );
 
+  const dec = useCallback(
+    (pc: number) => {
+      const value = stackPop(1)[0];
+      stackPush(value - 1);
+      return pc;
+    },
+    [stackPop, stackPush]
+  );
+
   const incc = useCallback(
     (pc: number) => {
       setCounter((counter) => counter + 1);
@@ -325,6 +334,7 @@ export function useCommands(
     map.set(CommandCode.JNE, () => jne(pc, commandMemory));
     map.set(CommandCode.JMP, () => jmp(pc, commandMemory));
     map.set(CommandCode.INC, () => inc(pc));
+    map.set(CommandCode.DEC, () => dec(pc));
     map.set(CommandCode.JE, () => je(pc, commandMemory));
     map.set(CommandCode.ROR, () => ror(pc, commandMemory));
     map.set(CommandCode.ROL, () => rol(pc, commandMemory));
@@ -353,6 +363,7 @@ export function useCommands(
     jne,
     jmp,
     inc,
+    dec,
     je,
     ror,
     rol,

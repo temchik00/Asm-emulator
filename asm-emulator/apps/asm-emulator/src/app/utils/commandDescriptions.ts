@@ -5,7 +5,11 @@ export const CommandDescription = {
     name: 'Push',
     description: 'Pushes a value onto the top of a stack',
     params: [
-      { name: 'value', description: 'Value to add on top of a stack', type: 'int' },
+      {
+        name: 'value',
+        description: 'Value to add on top of a stack',
+        type: 'int',
+      },
     ],
   },
   [CommandCode.POP]: {
@@ -128,6 +132,11 @@ export const CommandDescription = {
   [CommandCode.INC]: {
     name: 'Inc',
     description: 'Increments a value from the top of a stack',
+    params: [],
+  },
+  [CommandCode.DEC]: {
+    name: 'Dec',
+    description: 'Decrements a value from the top of a stack',
     params: [],
   },
   [CommandCode.ROR]: {
