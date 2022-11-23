@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import CodeEditor from '../../components/code-editor/code-editor';
+import Handbook from '../../components/handbook/handbook';
 import { CommandDescription } from '../../utils/commandDescriptions';
 import { getLabelsSet, getVariablesSet } from '../../utils/compile';
 import styles from './redactor.module.scss';
@@ -20,7 +21,9 @@ export function Redactor(props: RedactorProps) {
   const types = new Set(['INT', 'VEC']);
   const commands = useMemo(() => {
     return new Set(
-      Object.values(CommandDescription).map((command) => command.name.toLocaleUpperCase())
+      Object.values(CommandDescription).map((command) =>
+        command.name.toLocaleUpperCase()
+      )
     );
   }, [CommandDescription]);
 
@@ -116,33 +119,39 @@ export function Redactor(props: RedactorProps) {
           Load
         </button>
       </div>
-      <label htmlFor="data" className={styles['label']}>
-        Data
-      </label>
-      <CodeEditor
-        value={props.data}
-        onChange={(e) => {
-          props.setData(e.target.value);
-        }}
-        highlight={highlightData}
-        className={styles['data-input']}
-        id="data"
-      />
-      <label htmlFor="commands" className={styles['label']}>
-        Code
-      </label>
-      <CodeEditor
-        value={props.code}
-        onChange={(e) => {
-          props.setCode(e.target.value);
-        }}
-        highlight={highlightCode}
-        className={styles['commands-input']}
-        id="commands"
-      />
+      <div className={styles['inner-container']}>
+        <div className={styles['code-container']}>
+          <label htmlFor="data" className={styles['label']}>
+            Data
+          </label>
+          <CodeEditor
+            value={props.data}
+            onChange={(e) => {
+              props.setData(e.target.value);
+            }}
+            highlight={highlightData}
+            className={styles['data-input']}
+            id="data"
+          />
+          <label htmlFor="commands" className={styles['label']}>
+            Code
+          </label>
+          <CodeEditor
+            value={props.code}
+            onChange={(e) => {
+              props.setCode(e.target.value);
+            }}
+            highlight={highlightCode}
+            className={styles['commands-input']}
+            id="commands"
+          />
+        </div>
+        <Handbook />
+      </div>
       {props.error && (
         <div className={styles['error-message']}>{props.error}</div>
       )}
+
       <button className={styles['compile-button']} onClick={props.compileAll}>
         Compile
       </button>
