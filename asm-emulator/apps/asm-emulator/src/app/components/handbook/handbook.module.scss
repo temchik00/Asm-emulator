@@ -38,14 +38,14 @@
 
 .no-entries {
   margin: auto;
-    font-size: 24px;
+  font-size: 24px;
 }
 
 .entry {
   padding: 10px 10px 10px 15px;
 
   &:not(:last-child) {
-    border-bottom: 1px solid rgb(154, 154, 154);
+    border-bottom: 1px solid rgb(59, 60, 54);
   }
 
   &-header {

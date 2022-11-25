@@ -195,4 +195,9 @@ export const CommandDescription = {
       },
     ],
   },
+  [CommandCode.DUP]: {
+    name: 'Dup',
+    description: 'Duplicates a value from the top of a stack',
+    params: [],
+  },
 };

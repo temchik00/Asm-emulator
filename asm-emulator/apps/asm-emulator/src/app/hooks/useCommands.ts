@@ -313,8 +313,17 @@ export function useCommands(
     [stackPop, stackPush]
   );
 
+  const dup = useCallback(
+    (pc: number) => {
+      const val = stackPeek(1)[0];
+      stackPush(val);
+      return pc;
+    },
+    [stackPeek, stackPush]
+  );
+
   const commands = useMemo((): Map<CommandCode, () => number> => {
-    let map = new Map<CommandCode, () => number>();
+    const map = new Map<CommandCode, () => number>();
     map.set(CommandCode.PUSH, () => push(pc, commandMemory));
     map.set(CommandCode.POP, () => pop(pc));
     map.set(CommandCode.ADD, () => add(pc));
@@ -340,6 +349,7 @@ export function useCommands(
     map.set(CommandCode.ROL, () => rol(pc, commandMemory));
     map.set(CommandCode.RORN, () => rorn(pc, commandMemory));
     map.set(CommandCode.ROLN, () => roln(pc, commandMemory));
+    map.set(CommandCode.DUP, () => dup(pc));
     return map;
   }, [
     pc,
@@ -369,6 +379,7 @@ export function useCommands(
     rol,
     rorn,
     roln,
+    dup,
   ]);
   return { commands };
 }

@@ -24,4 +24,5 @@ export enum CommandCode {
   ROL = 0x16,
   RORN = 0x17,
   ROLN = 0x18,
+  DUP = 0x19,
 }
